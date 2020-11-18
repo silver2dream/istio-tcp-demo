@@ -1,12 +1,12 @@
 FROM golang:1.15.5 as builder
-COPY ./EchoClient ./src
-WORKDIR ./src
-RUN go build -o echoclient main.go
+WORKDIR /go/src/echoclient/
+COPY /EchoClient/main.go .
+RUN CGO_ENABLED=0 GOOS=linux go build -o echoclient main.go
 
 
 FROM golang:1.15.5 as runner
-WORKDIR ./echoclient
-COPY --from=builder ./src/echoclient ./echoclient
-ENTRYPOINT [ "echoclient" ]
-CMD [ "echo-tcp.default.svc.cluster.local", "8020" ]
+WORKDIR /bin/
+COPY --from=builder /go/src/echoclient .
+ENTRYPOINT [ "/bin/echoclient" ]
+CMD [ "10.0.1.180", "8020" ]
 EXPOSE 8020
