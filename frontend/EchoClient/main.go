@@ -18,8 +18,6 @@ func main() {
 		fmt.Println(res)
 	}
 
-	fmt.Println(res)
-
 	wait := make(chan bool)
 	<-wait
 }
@@ -31,23 +29,19 @@ func startTCP(addr string) (string, error) {
 	}
 	defer conn.Close()
 
-	go func() {
-		for {
-			conn.Write([]byte(time.Now().String()))
-			time.Sleep(1 * time.Second)
-		}
-	}()
+	for {
+		conn.Write([]byte(time.Now().String()))
+		time.Sleep(5 * time.Second)
 
-	go func() {
 		bs := make([]byte, 1024)
 		len, err := conn.Read(bs)
 		if err != nil {
 			fmt.Println(err)
 
 		} else {
-			fmt.Println(string(bs[:len]), nil)
+			fmt.Println(string(bs[:len]))
 		}
-	}()
+	}
 
 	return "Heartbeat Start", nil
 }
