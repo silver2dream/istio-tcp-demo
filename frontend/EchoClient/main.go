@@ -10,7 +10,7 @@ import (
 func main() {
 	host := os.Args[1]
 	port := os.Args[2]
-	addr := fmt.Sprintf("%v:%v", host, port)
+	addr := fmt.Sprintf("%s:%s", host, port)
 	res, err := startTCP(addr)
 	if err != nil {
 		fmt.Println(err)
@@ -23,6 +23,7 @@ func main() {
 }
 
 func startTCP(addr string) (string, error) {
+	fmt.Printf("1.1.0, Connect to: %v\n",addr)
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
 		return "", err
