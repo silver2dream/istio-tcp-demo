@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
@@ -11,11 +12,21 @@ import (
 	"gorm.io/gorm"
 )
 
+var db *gorm.DB
+var dbConnErr error
+
+type Player struct {
+	gorm.Model
+	Name     string
+	Account  string
+	Password string
+}
+
 const indexPage = `
 <h1>Login</h1>
 <form method="post" action="/v1/login">
-    <label for="name">User name</label>
-    <input type="text" id="name" name="name">
+    <label for="account">Account</label>
+    <input type="text" id="account" name="account">
     <label for="password">Password</label>
     <input type="password" id="password" name="password">
     <button type="submit">Login</button>
@@ -45,12 +56,17 @@ func internalPageHandler(response http.ResponseWriter, request *http.Request) {
 }
 
 func loginHandler(response http.ResponseWriter, request *http.Request) {
-	name := request.FormValue("name")
+	account := request.FormValue("account")
 	pass := request.FormValue("password")
-	redirectTarget := "/"
-	if name != "" && pass != "" {
+
+	var player Player
+	db.First(&player, "account = ?", account, pass)
+
+	fmt.Println("login test.")
+	redirectTarget := "/index"
+	if player.Name != "" {
 		// .. check credentials ..
-		setSession(name, response)
+		setSession(player.Name, response)
 		redirectTarget = "/internal"
 	}
 	http.Redirect(response, request, redirectTarget, 302)
@@ -101,23 +117,12 @@ func clearSession(response http.ResponseWriter) {
 
 var router = mux.NewRouter()
 
-type Product struct {
-	gorm.Model
-	Code  string
-	Price uint
-}
-
 func main() {
-	db, err := gorm.Open(mysql.Open("user.db"), &gorm.Config{})
-	if err != nil {
+	dsn := fmt.Sprintf("root:1234@tcp(%s:%s)/arpg?charset=utf8&parseTime=true", os.Args[1], os.Args[2])
+	db, dbConnErr = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if dbConnErr != nil {
 		panic("failed to connect database")
 	}
-
-	// Migrate the schema
-	db.AutoMigrate(&Product{})
-
-	// Create
-	db.Create(&Product{Code: "D42", Price: 100})
 
 	router.HandleFunc("/index", indexPageHandler)
 	router.HandleFunc("/internal", internalPageHandler)
@@ -125,5 +130,7 @@ func main() {
 	router.HandleFunc("/v1/login", loginHandler).Methods("POST")
 	router.HandleFunc("/v1/logout", logoutHandler).Methods("POST")
 
+	fmt.Println("server start.")
 	http.ListenAndServe(":8033", router)
+
 }
