@@ -1,0 +1,52 @@
+tcp:
+    enable: false
+    srv:
+      port: :31400
+    db:
+      host: db:3308
+      user: root
+      passwd: 1234
+      type: mysql
+      db: arpg
+      conn:
+        maxidle: 50
+        maxopen: 120
+http:
+  enable: true
+  srv:
+    port: :8033
+  db:
+    host: 10.0.1.101:3308
+    user: root
+    passwd: 1234
+    type: mysql
+    db: arpg
+    conn:
+      maxidle: 50
+      maxopen: 120
+https:
+  enable: false
+  srv:
+    port: :8093
+  db:
+    host: db:3308
+    user: root
+    passwd: 1234
+    type: mysql
+    db: arpg
+    conn:
+      maxidle: 50
+      maxopen: 120
+grpc:
+  enable: false
+  srv:
+    port: :31402
+  db:
+    host: db:3308
+    user: root
+    passwd: 1234
+    type: mysql
+    db: arpg
+    conn:
+      maxidle: 50
+      maxopen: 120
