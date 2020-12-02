@@ -17,7 +17,8 @@ type Database struct {
 }
 
 type Conf struct {
-	Enable bool `yaml:"enable"`
+	Name   string `yaml:"name"`
+	Enable bool   `yaml:"enable"`
 	Srv    Service
 	Db     Database
 }

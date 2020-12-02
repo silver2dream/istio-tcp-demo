@@ -2,19 +2,17 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
-	"net/http"
 	"os"
-
-	"github.com/gorilla/mux"
 
 	"gorm.io/gorm"
 
 	conf "server/conf"
+	"server/content"
 )
 
 var config conf.Conf
+var parserErr error
 var protocol conf.Protocol
 
 type Player struct {
@@ -24,28 +22,22 @@ type Player struct {
 	Password string
 }
 
-func echoHandler(response http.ResponseWriter, request *http.Request) {
-	response.Write([]byte("Hello World"))
-}
-
-var router = mux.NewRouter()
-
 func init() {
 	var confFile string
 	flag.StringVar(&confFile, "c", os.Args[1], "config file")
 	flag.Parse()
 
-	err := conf.ConfParser(confFile, &protocol, &config)
-	if err != nil {
-		log.Fatalf("parser config failed:", err.Error())
+	config, parserErr = conf.ConfParser(confFile, &protocol)
+	if parserErr != nil {
+		log.Fatalf("parser config failed:", parserErr.Error())
 	}
 }
 
 func main() {
-	router.HandleFunc("/echo", echoHandler)
-
-	fmt.Println("server start.")
-	fmt.Println(config.Srv.Port)
-	http.ListenAndServe(config.Srv.Port, router)
-
+	IFactory := &content.ContentFactory{}
+	IContent := IFactory.Create(config)
+	if IContent == nil {
+		panic("content is nil.")
+	}
+	IContent.Start()
 }

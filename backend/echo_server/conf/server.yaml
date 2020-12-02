@@ -1,4 +1,5 @@
 tcp:
+    name: tcp
     enable: false
     srv:
       port: :31400
@@ -12,6 +13,7 @@ tcp:
         maxidle: 50
         maxopen: 120
 http:
+  name: http
   enable: true
   srv:
     port: :8033
@@ -25,6 +27,7 @@ http:
       maxidle: 50
       maxopen: 120
 https:
+  name: https
   enable: false
   srv:
     port: :8093
@@ -38,6 +41,7 @@ https:
       maxidle: 50
       maxopen: 120
 grpc:
+  name: grpc
   enable: false
   srv:
     port: :31402
