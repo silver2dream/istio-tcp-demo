@@ -31,9 +31,15 @@ func ConfParser(file string, in interface{}) (Conf, error) {
 	values := make([]interface{}, configs.NumField())
 	for i := 0; i < configs.NumField(); i++ {
 		values[i] = configs.Field(i).Interface()
-		proto := values[i].(Conf)
-		if proto.Enable == true {
-			config = proto
+		switch values[i].(type) {
+		case Protocol:
+			proto := values[i].(Protocol)
+			if proto.Enable == true {
+				config.Proto = proto
+			}
+		case Database:
+			db := values[i].(Database)
+			config.Db = db
 		}
 	}
 	return config, nil

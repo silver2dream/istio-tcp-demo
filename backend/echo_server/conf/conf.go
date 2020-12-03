@@ -1,31 +1,33 @@
 package conf
 
-type Service struct {
-	Port string `yaml:"port"`
-}
-
 type Database struct {
-	Host   string `yaml:"host"`
-	User   string `yaml:"user"`
-	Passwd string `yaml:"passwd"`
-	Type   string `yaml:"type"`
-	Db     string `yaml:"db"`
-	Conn   struct {
+	External bool   `yaml:"external"`
+	Host     string `yaml:"host"`
+	User     string `yaml:"user"`
+	Passwd   string `yaml:"passwd"`
+	Type     string `yaml:"type"`
+	Db       string `yaml:"db"`
+	Conn     struct {
 		Maxidle int `yaml:"maxidle"`
 		Maxopen int `yaml:"maxopen"`
 	}
 }
 
-type Conf struct {
+type Protocol struct {
 	Name   string `yaml:"name"`
 	Enable bool   `yaml:"enable"`
-	Srv    Service
-	Db     Database
+	Port   string `yaml:"port"`
 }
 
-type Protocol struct {
-	TCPConf   Conf `yaml:"tcp"`
-	HTTPConf  Conf `yaml:"http"`
-	HTTPSConf Conf `yaml:"https"`
-	GRPCConf  Conf `yaml:"grpc"`
+type ConfigMap struct {
+	TCPConf   Protocol `yaml:"tcp"`
+	HTTPConf  Protocol `yaml:"http"`
+	HTTPSConf Protocol `yaml:"https"`
+	GRPCConf  Protocol `yaml:"grpc"`
+	Db        Database `yaml:"db"`
+}
+
+type Conf struct {
+	Proto Protocol
+	Db    Database
 }

@@ -7,6 +7,6 @@ FROM scratch as runner
 WORKDIR /bin/
 COPY --from=builder /go/src/echo_server/generic_echo_server .
 COPY --from=builder /go/src/echo_server/conf/server.yaml .
-ENTRYPOINT [ "/bin/generic_echo_server", "-c", "/bin/server.yaml" ]
-CMD [ "8033" ]
+ENTRYPOINT [ "/bin/generic_echo_server" ]
+CMD [ "8033", "-c", "server.yaml" ]
 EXPOSE 8033

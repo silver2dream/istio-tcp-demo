@@ -6,7 +6,8 @@ tcp:
 http:
   name: http
   enable: true
-  host: http://generic-echo-server-svc.default.svc.cluster.local:8033/echo
+  #host: http://generic-echo-server-svc.default.svc.cluster.local:8033/echo
+  host: http://localhost:8033/echo
   interval: 1 #ms
 https:
   name: https

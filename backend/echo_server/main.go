@@ -4,8 +4,7 @@ import (
 	"flag"
 	"log"
 	"os"
-
-	"gorm.io/gorm"
+	database "server/db"
 
 	conf "server/conf"
 	"server/content"
@@ -13,29 +12,23 @@ import (
 
 var config conf.Conf
 var parserErr error
-var protocol conf.Protocol
-
-type Player struct {
-	gorm.Model
-	Name     string
-	Account  string
-	Password string
-}
+var configmap conf.ConfigMap
 
 func init() {
 	var confFile string
 	flag.StringVar(&confFile, "c", os.Args[1], "config file")
 	flag.Parse()
 
-	config, parserErr = conf.ConfParser(confFile, &protocol)
+	config, parserErr = conf.ConfParser(confFile, &configmap)
 	if parserErr != nil {
 		log.Fatalf("parser config failed:", parserErr.Error())
 	}
+
+	database.InitDbConn(config.Db)
 }
 
 func main() {
-	IFactory := &content.ContentFactory{}
-	IContent := IFactory.Create(config)
+	IContent := content.Factory.Create(config)
 	if IContent == nil {
 		panic("content is nil.")
 	}
