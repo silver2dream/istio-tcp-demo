@@ -16,16 +16,26 @@ type Http struct {
 	config conf.Conf
 }
 
-func (h *Http) echoHandler(response http.ResponseWriter, request *http.Request) {
+type echoHandler int
+
+func (e echoHandler) ServeHTTP(response http.ResponseWriter, request *http.Request) {
+
 	fmt.Println("receive from:", request.RemoteAddr)
 	name := database.GetTestingSQLService()
 	response.Write([]byte(name + ":" + time.Now().Format("2006-01-02 15:04:05")))
 }
 
 func (h *Http) Start() {
-	router.HandleFunc("/echo", h.echoHandler)
-
+	var handler echoHandler
+	//router.HandleFunc("/echo", echoHandler)
+	http.Handle("/echo", handler)
 	fmt.Println("http server start.")
 	fmt.Println(h.config.Proto.Port)
-	http.ListenAndServe(h.config.Proto.Port, router)
+	srv := &http.Server{
+		Addr:         h.config.Proto.Port,
+		Handler:      handler,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+	srv.ListenAndServe()
 }

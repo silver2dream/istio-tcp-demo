@@ -21,6 +21,7 @@ db:
   passwd: 1234
   type: mysql
   db: arpg
+  hardcodedelay: 0
   conn:
     maxidle: 50
     maxopen: 120

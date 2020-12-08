@@ -16,7 +16,10 @@ type Http struct {
 func (h *Http) Start() {
 
 	for {
-		res, err := http.Get(h.config.Host)
+		client := http.Client{
+			//Timeout: 5 * time.Second,
+		}
+		res, err := client.Get(h.config.Host)
 		if err != nil {
 			panic(err)
 		}

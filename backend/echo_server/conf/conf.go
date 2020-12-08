@@ -1,13 +1,14 @@
 package conf
 
 type Database struct {
-	External bool   `yaml:"external"`
-	Host     string `yaml:"host"`
-	User     string `yaml:"user"`
-	Passwd   string `yaml:"passwd"`
-	Type     string `yaml:"type"`
-	Db       string `yaml:"db"`
-	Conn     struct {
+	External      bool   `yaml:"external"`
+	Host          string `yaml:"host"`
+	User          string `yaml:"user"`
+	Passwd        string `yaml:"passwd"`
+	Type          string `yaml:"type"`
+	Db            string `yaml:"db"`
+	HardcodeDelay int    `yaml:"hardcodedelay"`
+	Conn          struct {
 		Maxidle int `yaml:"maxidle"`
 		Maxopen int `yaml:"maxopen"`
 	}
