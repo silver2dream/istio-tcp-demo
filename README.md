@@ -30,7 +30,7 @@
 
 ## DestniationRule
 ### 與 k8s 的不同
-在 k8s 中，client 需要使用不同服務入口才可以存取多個不同服務；而 **Istio 可以只使用一個服務入口**，Istio 透過流量的特徵來完成對後端服務的選擇。
+在 k8s 中，client 需要使用不同服務入口才可以存取多個不同服務；而**可以只使用一個服務入口**，Istio 透過流量的特徵來完成對後端服務的選擇。
 
 
 ### 欄位說明
@@ -261,7 +261,7 @@ spec:
 ```
 
 ### Egress
-出口，負責使 mesh 內的服務可以存取外部服務 (不在 mesh 內)；建議使用 ServiceEntry 的方式訪問外部服務，優點是<span class=red>不會丟失流量監控和控制特性</span>。
+出口，負責使 mesh 內的服務可以存取外部服務 (不在 mesh 內)；建議使用 ServiceEntry 的方式訪問外部服務，優點是**不會丟失流量監控和控制特性**。
 
 * 固定 IP 沒有提供 FQDN 的方式
 ``` yaml
@@ -516,8 +516,6 @@ spec:
     * enable: 是否啟用該 protocol 內容
     * port: 哪一個 port 監聽
 
-<span class=red>若全部啟用，會以優先讀到的順序為主。</span>
-
 * db:
     * external: 是否啟用連接外部 db
     * host: db IP or FQDN
@@ -608,3 +606,4 @@ metadata:
   labels:
     istio-injection: enabled
 ```
+2. grpc sample，這邊將 istio-ingressgateway 新增 grpc 接口 31402:31666，Gateway 物件則以 31666 監聽，藉以測試路由；故若從外部啟動 client 並發起請求，須將 port 設為 31402。
