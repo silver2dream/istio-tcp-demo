@@ -30,7 +30,7 @@
 
 ## DestniationRule
 ### 與 k8s 的不同
-在 k8s 中，client 需要使用不同服務入口才可以存取多個不同服務；而 <span class=red>Istio 可以只使用一個服務入口</span>，Istio 透過流量的特徵來完成對後端服務的選擇。
+在 k8s 中，client 需要使用不同服務入口才可以存取多個不同服務；而 <font color=red>Istio 可以只使用一個服務入口</font>，Istio 透過流量的特徵來完成對後端服務的選擇。
 
 
 ### 欄位說明
