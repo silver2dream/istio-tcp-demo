@@ -9,4 +9,4 @@ COPY --from=builder /go/src/echo_client/generic_echo_client .
 COPY --from=builder /go/src/echo_client/conf/client.yaml .
 ENTRYPOINT [ "/bin/generic_echo_client"]
 CMD [ "-c", "client.yaml" ]
-EXPOSE 8035
+EXPOSE 5000
