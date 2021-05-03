@@ -11,8 +11,8 @@ pipeline {
 
     stage('Build') {
       agent {
-        docker {
-          image '1.16.3-alpine'
+        dockerfile {
+          filename './backend/DockerfileGo'
         }
 
       }
